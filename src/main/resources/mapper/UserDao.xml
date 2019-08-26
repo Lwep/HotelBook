@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rhine.studySSM.dao.UserDao">
+    <resultMap id="userResultMap" type="com.rhine.studySSM.entity.User">
+        <id property="id" column="user_id" />
+        <result property="username" column="username" />
+        <result property="password" column="userpass" />
+        <result property="email" column="email" />
+        <result property="phone" column="phone" />
+        <result property="realName" column="realname" />
+        <result property="status" column="status" />
+    </resultMap>
+
+    <select id="userlogin" parameterType="com.rhine.studySSM.entity.User" resultType="com.rhine.studySSM.entity.User">
+        SELECT user_id,username,userpass,email,phone,realname,status FROM tb_user WHERE username=#{username} AND userpass=#{password}
+    </select>
+
+    <select id="selectAll" resultType="com.rhine.studySSM.entity.User">
+        select *
+        from tb_user
+    </select>
+
+
+    <select id="findUsersByUsername" resultType="com.rhine.studySSM.entity.User">
+        select * from user
+        where name=#{name}
+    </select>
+    <!--执行增加操作的SQL语句。id和parameterType分别与IUserOperation接口中的addUser方法的名字和参数类型一致。
+        useGeneratedKeys设置为"true"表明要MyBatis获取由数据库自动生成的主键； keyProperty="id"指定把获取到的主键值注入到User的id属性 -->
+    <insert id="addUser" parameterType="com.rhine.studySSM.entity.User"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into
+        user(name,password) values(#{name},#{password})
+    </insert>
+    <update id="modifyPasswordByUsername" parameterType="com.rhine.studySSM.entity.User">
+        update user set password=#{password} where name=#{name}
+    </update>
+
+    <insert id="save" parameterType="com.rhine.studySSM.entity.User" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_user(username,userpass,email,phone,realname,status)
+        values(#{username},#{password},#{email},#{phone},#{realName},#{status})
+    </insert>
+
+
+    <select id="findByUsername" resultMap="userResultMap" parameterType="string">
+        select user_id,username,userpass,email,phone,realname,gender,photo_path,status
+        from tb_user
+        where username=#{username}
+    </select>
+
+    <select id="findById" resultMap="userResultMap" parameterType="int">
+        select user_id,username,userpass,email,phone,realname,gender,photo_path,status
+        from tb_user
+        where user_id=#{id}
+    </select>
+
+</mapper>
+
+
